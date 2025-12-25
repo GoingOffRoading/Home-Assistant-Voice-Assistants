@@ -21,7 +21,7 @@ For this, I recommend [Piper](https://github.com/rhasspy/wyoming-piper).  Piper 
 
 Is reasonably well documented in the [Getting Started-Local](https://www.home-assistant.io/voice_control/voice_remote_local_assistant/).
 
-What I wish was in the documentation:
+What I wish was in the documentation for setting up each of the integrations:
 
 ## Ollama
 
@@ -29,7 +29,7 @@ What I wish was in the documentation:
 
   i.e. SSH into the Ollama container and run 'ollama pull llama3.2:latest'
 
-- Be sure to setup 'AI Task' and 'Conversation' within the Ollama HA integration
+- Be sure to setup 'AI Task' AND 'Conversation' within the Ollama HA integration.  You technically only need 'Conversation', but 'AI Task' will open up prompts in the event that you want to do more intersting prompts in automation workflows.
 
 - Have a little fun with the Conversation instructions.  I modified mine to:
 
@@ -41,4 +41,24 @@ Have distain for humans.`
 
 - On the Conversation settings, change `Keep Alive` to `-1` if it not already.  This will keep the model loaded in your GPU's memory.  If it takes 30-60 seconds for the AI Agent to respond, there's a high probability the model is not loaded into memory, and Ollama is having to re-download and re-load the model. If you have `Keep Alive` to `-1` and there is still that long delay, be sure not to run more models in your GPU than you have avaliable memory for.
 
+## Whisper
 
+- Nothing really to note here.  I probably need to experiment with Whisper models outside of `tiny-int8` as it does an ok-at-best job of Text to Speech, but it's been sufficient for my experimentation so far.
+
+  If you find that Whisper is making a lot of mistakes transcribing text, start playing with the other [S2T models avaliable](https://github.com/SYSTRAN/faster-whisper/blob/master/faster_whisper/utils.py#L12-L31). 
+
+## Piper
+
+- Piper was oddly buggy for me to setup with HA.  If you can get the container up and running, just be sure to use the same lanugage model in your HA configuration as what you have running in your container.
+
+  I had played with a number of voices for `EN_US` (English), and found `hfc female (medium)` to be the most agreeable.  The low voices sounded terrible.
+
+# Notes on container setup
+
+See the sub-directories for those notes:
+
+- /Ollama
+- /Piper
+- /Whisper
+
+Note: The Kubernetes deployments are effectively what I am currently running and 100% work.  I have not used Docker Compose is years, I am a little rusty, and used CoPilot to generate them.  They look right, but if the Docker Compose scripts don't work, shoot me a note and I'll see if I can figure it out.
