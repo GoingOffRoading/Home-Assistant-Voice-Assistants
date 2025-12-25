@@ -1,0 +1,56 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: olamma
+  namespace: default
+  labels:
+    app: olamma
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: olamma
+  template:
+    metadata:
+      labels:
+        app: olamma
+    spec:
+      runtimeClassName: nvidia
+      containers:
+        - name: olamma
+          image: ollama/ollama:latest
+          imagePullPolicy: Always
+          env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: all
+          ports:
+            - containerPort: 11434
+          volumeMounts:
+            - name: olamma-config
+              mountPath: "/root/.ollama"
+      volumes:
+        - name: olamma-config
+          hostPath:
+              path: /mnt/ollama
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: olamma
+  namespace: default
+spec:
+  selector:
+    app: olamma
+  ports:
+    - name: olamma
+      protocol: TCP
+      port: 11434 
+      nodePort: 32125
+  type: NodePort
+

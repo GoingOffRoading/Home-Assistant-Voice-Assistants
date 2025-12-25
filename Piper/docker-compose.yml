@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  piper:
+    image: rhasspy/wyoming-piper:latest
+    command: ["--voice", "en_US-hfc_female-medium"]
+    ports:
+      - "10200:10200"

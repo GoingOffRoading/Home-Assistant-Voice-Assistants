@@ -1,0 +1,62 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: faster-whisper
+  namespace: default
+  labels:
+    app: faster-whisper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: faster-whisper
+  template:
+    metadata:
+      labels:
+        app: faster-whisper
+    spec:
+      containers:
+        - name: faster-whisper
+          image: lscr.io/linuxserver/faster-whisper:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Etc/PST"
+            - name: WHISPER_MODEL
+              value: "tiny-int8"
+            - name: local_files_only
+              value: "FALSE"
+          ports:
+            - containerPort: 10300
+          volumeMounts:
+            - name: faster-whisper-config
+              mountPath: "config"
+      nodeName: node100
+      volumes:
+        - name: faster-whisper-config
+          hostPath:
+              path: /mnt/whisper
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: faster-whisper
+  namespace: default
+spec:
+  selector:
+    app: faster-whisper
+  ports:
+    - name: faster-whisper
+      protocol: TCP
+      port: 10300
+      nodePort: 30303
+  type: NodePort
+

@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  faster-whisper:
+    image: lscr.io/linuxserver/faster-whisper:latest
+    ports:
+      - "10300:10300"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/PST
+      - WHISPER_MODEL=tiny-int8
+      - local_files_only=FALSE
+    volumes:
+      - /mnt/whisper:config
