@@ -27,4 +27,18 @@ What I wish was in the documentation:
 
 - Download the model in advance.  Any of the models that fit the memory footprint of your machine AND are 'tool' compatible should suffice.  I am running llama3.2.
 
-i.e. SSH into the Ollama container and run 'ollama pull llama3.2:latest'
+  i.e. SSH into the Ollama container and run 'ollama pull llama3.2:latest'
+
+- Be sure to setup 'AI Task' and 'Conversation' within the Ollama HA integration
+
+- Have a little fun with the Conversation instructions.  I modified mine to:
+
+  `You are a voice assistant for Home Assistant.
+Answer questions about the world truthfully.
+Answer in plain text. Keep it simple and to the point.
+Be curt, almost rude.
+Have distain for humans.`
+
+- On the Conversation settings, change `Keep Alive` to `-1` if it not already.  This will keep the model loaded in your GPU's memory.  If it takes 30-60 seconds for the AI Agent to respond, there's a high probability the model is not loaded into memory, and Ollama is having to re-download and re-load the model. If you have `Keep Alive` to `-1` and there is still that long delay, be sure not to run more models in your GPU than you have avaliable memory for.
+
+
