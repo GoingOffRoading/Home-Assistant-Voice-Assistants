@@ -1,9 +1,6 @@
-# Home-Assistant-Voice-Assistant
-I didn't see [documentation or examples of how to spin up local versions of Home Assistant local Voice Assistant](https://www.home-assistant.io/voice_control/), so I wanted to provide my notes here.
+# Ollama Setup
 
-# Basic Dependencies
-Voice Assistants in Home Assistant need three component functions:
-- Conversation Agent
-- Speed to Text
-- Text-to-speech
+Nothing crazy to note.
 
+- These deployment examples assume you have an Nvidia GPU, have the Nvidia runtime and/or Kubernetes Plugin, and the drivers installed.  Replace the Nvidia with Intel or whatever GPU/TPU you are using,
+- I do not fully understand which Nvidia capabilities are needed within the Nvidia container runtime/Kubernetes plugin so I defaulted to `All` because I am tremendously lazy
